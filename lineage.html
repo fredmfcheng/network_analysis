@@ -1,0 +1,123 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 75%;
+            height: 1500px;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<div id = "config"></div>
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#40E0D0", "font": {"color": "white"}, "id": "star trader [hk]", "label": "star trader [hk]", "shape": "dot", "title": "Campus: hk | Division: equities | Process: input trade"}, {"color": "#DE3163", "font": {"color": "white"}, "id": "razor [jp]", "label": "razor [jp]", "shape": "dot", "title": "Campus: jp | Division: equities | Process: send trade to market"}, {"color": "#FF7F50", "font": {"color": "white"}, "id": "bloomberg client [kr]", "label": "bloomberg client [kr]", "shape": "dot", "title": "Campus: kr | Division: market data | Process: get market data"}, {"color": "#40E0D0", "font": {"color": "white"}, "id": "bloomberg [hk]", "label": "bloomberg [hk]", "shape": "dot", "title": "Campus: hk | Division: market data | Process: market data connection head"}, {"color": "#40E0D0", "font": {"color": "white"}, "id": "murax [hk]", "label": "murax [hk]", "shape": "dot", "title": "Campus: hk | Division: ficc | Process: input fx order"}, {"color": "#DE3163", "font": {"color": "white"}, "id": "fx-pool [jp]", "label": "fx-pool [jp]", "shape": "dot", "title": "Campus: jp | Division: ficc | Process: match fx trade"}, {"color": "#40E0D0", "font": {"color": "white"}, "id": "black tunnel [hk]", "label": "black tunnel [hk]", "shape": "dot", "title": "Campus: hk | Division: equities | Process: input black pool order"}, {"color": "#FFBF00", "font": {"color": "white"}, "id": "black pool [sg]", "label": "black pool [sg]", "shape": "dot", "title": "Campus: sg | Division: equities | Process: black pool trade matching"}, {"color": "#FFBF00", "font": {"color": "white"}, "id": "black tunnel [sg]", "label": "black tunnel [sg]", "shape": "dot", "title": "Campus: sg | Division: equities | Process: input black pool order"}, {"color": "#DE3163", "font": {"color": "white"}, "id": "black tunnel [jp]", "label": "black tunnel [jp]", "shape": "dot", "title": "Campus: jp | Division: equities | Process: input black pool order"}, {"color": "#FF7F50", "font": {"color": "white"}, "id": "black tunnel [kr]", "label": "black tunnel [kr]", "shape": "dot", "title": "Campus: kr | Division: equities | Process: input black pool order"}, {"color": "#FFBF00", "font": {"color": "white"}, "id": "Market AnalyticsX Client [sg]", "label": "Market AnalyticsX Client [sg]", "shape": "dot", "title": "Campus: sg | Division: market data | Process: query market data"}, {"color": "#40E0D0", "font": {"color": "white"}, "id": "Market AnalyticsX [hk]", "label": "Market AnalyticsX [hk]", "shape": "dot", "title": "Campus: hk | Division: market data | Process: market data connection head"}, {"color": "#40E0D0", "font": {"color": "white"}, "id": "Market AnalyticsX Client [hk]", "label": "Market AnalyticsX Client [hk]", "shape": "dot", "title": "Campus: hk | Division: market data | Process: query market data"}, {"color": "#FF7F50", "font": {"color": "white"}, "id": "Market AnalyticsX Client [kr]", "label": "Market AnalyticsX Client [kr]", "shape": "dot", "title": "Campus: kr | Division: market data | Process: query market data"}, {"color": "#DE3163", "font": {"color": "white"}, "id": "Market AnalyticsX Client [jp]", "label": "Market AnalyticsX Client [jp]", "shape": "dot", "title": "Campus: jp | Division: market data | Process: query market data"}, {"color": "#DFFF00", "font": {"color": "white"}, "id": "Market AnalyticsX Client [au]", "label": "Market AnalyticsX Client [au]", "shape": "dot", "title": "Campus: au | Division: market data | Process: query market data"}, {"color": "#CCCCFF", "font": {"color": "white"}, "id": "Market AnalyticsX Client [de]", "label": "Market AnalyticsX Client [de]", "shape": "dot", "title": "Campus: de | Division: market data | Process: query market data"}, {"color": "#6495ED", "font": {"color": "white"}, "id": "Market AnalyticsX [uk]", "label": "Market AnalyticsX [uk]", "shape": "dot", "title": "Campus: uk | Division: market data | Process: market data connection head"}, {"color": "#6495ED", "font": {"color": "white"}, "id": "Market AnalyticsX Client [uk]", "label": "Market AnalyticsX Client [uk]", "shape": "dot", "title": "Campus: uk | Division: market data | Process: query market data"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "star trader [hk]", "to": "razor [jp]", "value": 1990}, {"arrows": "to", "from": "bloomberg client [kr]", "to": "bloomberg [hk]", "value": 5000}, {"arrows": "to", "from": "murax [hk]", "to": "fx-pool [jp]", "value": 563}, {"arrows": "to", "from": "black tunnel [hk]", "to": "black pool [sg]", "value": 32324}, {"arrows": "to", "from": "black tunnel [sg]", "to": "black pool [sg]", "value": 996}, {"arrows": "to", "from": "black tunnel [jp]", "to": "black pool [sg]", "value": 4555}, {"arrows": "to", "from": "black tunnel [kr]", "to": "black pool [sg]", "value": 2323}, {"arrows": "to", "from": "black tunnel [kr]", "to": "black pool [sg]", "value": 1500}, {"arrows": "to", "from": "Market AnalyticsX Client [sg]", "to": "Market AnalyticsX [hk]", "value": 111}, {"arrows": "to", "from": "Market AnalyticsX Client [hk]", "to": "Market AnalyticsX [hk]", "value": 10000}, {"arrows": "to", "from": "Market AnalyticsX Client [kr]", "to": "Market AnalyticsX [hk]", "value": 333}, {"arrows": "to", "from": "Market AnalyticsX Client [jp]", "to": "Market AnalyticsX [hk]", "value": 3311}, {"arrows": "to", "from": "Market AnalyticsX Client [au]", "to": "Market AnalyticsX [hk]", "value": 32}, {"arrows": "to", "from": "Market AnalyticsX Client [de]", "to": "Market AnalyticsX [uk]", "value": 233}, {"arrows": "to", "from": "Market AnalyticsX Client [uk]", "to": "Market AnalyticsX [uk]", "value": 8889}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
